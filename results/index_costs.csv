@@ -1,0 +1,11 @@
+method,dataset,index_cost_usd,llm_calls,estimated
+graph_r1,musique,2.6248831499999974,1354,False
+lightrag,musique,5.985219774260866,9732,True
+graph_r1,hotpotqa,2.457227850000001,1311,False
+lightrag,hotpotqa,5.225689726869562,8497,True
+graph_r1,2wikimultihop,1.3333789499999993,658,False
+lightrag,2wikimultihop,2.7502982768695636,4472,True
+graph_r1,medical,0.3566646000000001,225,False
+lightrag,medical,1.0608820499999994,1725,False
+graph_r1,novel,1.6538140500000023,1117,False
+lightrag,novel,4.500599908347823,7318,True
