@@ -87,11 +87,11 @@ def markdown(summary, idx):
         cells = []
         for d in dss:
             r = summary[(summary.method == m) & (summary.dataset == d)]
-            cells.append(f"{_pct(r.llm_acc.iloc[0])} [{_pct(r.llm_acc_lo.iloc[0])}–{_pct(r.llm_acc_hi.iloc[0])}]" if len(r) else "–")
+            cells.append(f"{_pct(r.llm_acc.iloc[0])} [{_pct(r.llm_acc_lo.iloc[0])}-{_pct(r.llm_acc_hi.iloc[0])}]" if len(r) else "-")
         g = summary[summary.method == m]
         mh = g[g.dataset.isin(config.SHORT_ANSWER)]
-        mh_avg = f"**{_pct(mh.llm_acc.mean())}**" if len(mh) == len(config.SHORT_ANSWER) else "–"
-        all_avg = _pct(g.llm_acc.mean()) if len(g) == len(config.DATASETS) else "–"
+        mh_avg = f"**{_pct(mh.llm_acc.mean())}**" if len(mh) == len(config.SHORT_ANSWER) else "-"
+        all_avg = _pct(g.llm_acc.mean()) if len(g) == len(config.DATASETS) else "-"
         lines.append(f"| `{m}` | " + " | ".join(cells) + f" | {mh_avg} | {all_avg} |")
     short = summary[summary.dataset.isin(config.SHORT_ANSWER)]
     lines += ["", "## Short-answer metrics, averaged over MuSiQue / HotpotQA / 2Wiki (%)", "",

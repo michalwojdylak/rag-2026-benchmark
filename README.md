@@ -1,7 +1,7 @@
 # RAG in 2026: nine retrieval strategies, one search engine, five datasets
 
-A reproducible head-to-head of recent RAG ideas — **agentic RAG, A-RAG (Feb 2026), Search-R1
-(RL-trained search agent), Graph-R1 (ICML 2026), LightRAG, MetaRAG** — against plain and reranked
+A reproducible head-to-head of recent RAG ideas - **agentic RAG, A-RAG (Feb 2026), Search-R1
+(RL-trained search agent), Graph-R1 (ICML 2026), LightRAG, MetaRAG** - against plain and reranked
 hybrid search. Every method runs on the **same OpenSearch index, the same embedding model, the same
 generator LLM and the same questions**, so the only thing that changes is *how the system asks for data*.
 
@@ -14,7 +14,7 @@ generator LLM and the same questions**, so the only thing that changes is *how t
    naive RAG 56 → 78 %, `agentic_rag` 66 → 85 %, A-RAG 66 → 86 %, Graph-R1 34 → 62 %.
    With reasoning on, the agentic loops are clearly best; with it off they barely beat one-shot retrieval.
 2. **With reasoning off, the methods cluster within the noise.** Multi-hop averages: MetaRAG 72.5, LightRAG 71.3,
-   hybrid + reranker 71.2, A-RAG 68.2, agentic RAG 68.0, naive hybrid 67.2 (95 % CIs are ±6–7 pp per dataset).
+   hybrid + reranker 71.2, A-RAG 68.2, agentic RAG 68.0, naive hybrid 67.2 (95 % CIs are ±6-7 pp per dataset).
    A local cross-encoder on top of OpenSearch hybrid search reaches the top cluster for **$1.26 per 1,000
    questions**; LightRAG costs **14× more per query** (~23k context tokens) plus a ~$20 graph build.
 3. **MetaRAG is a reasoning prosthesis.** Its monitor → critic → planner loop is the best method on 2Wiki with
@@ -22,11 +22,11 @@ generator LLM and the same questions**, so the only thing that changes is *how t
 4. **Graph-R1 needs its RL-trained policy.** Without released weights, the prompted policy issues one query for
    93 % of 2Wiki questions and scores below naive RAG. Giving the same hypergraph to a function-calling loop
    (`graph_r1_fc`) adds +17 pp on multi-hop; reasoning adds +28 pp. LLM-rewritten hyperedges still lose detail
-   that raw passages keep (context recall 59 % vs 65–83 % for the passage-based methods).
-5. **Search-R1, a 7B RL-trained search agent on a laptop**, lands at 64.0 % on multi-hop — within 4 pp of
+   that raw passages keep (context recall 59 % vs 65-83 % for the passage-based methods).
+5. **Search-R1, a 7B RL-trained search agent on a laptop**, lands at 64.0 % on multi-hop - within 4 pp of
    `gpt-5.4-mini` naive RAG on the same 100 questions per dataset (67.7 %), tied on MuSiQue (47 vs 47).
    It searches ~3 times per question and retrieves as well as the frontier-model agent loop (context recall
-   73.7 % vs 73.5 % for `agentic_rag`), but is a weaker reader. $0 API cost, 1–2 minutes per question on an M3.
+   73.7 % vs 73.5 % for `agentic_rag`), but is a weaker reader. $0 API cost, 1-2 minutes per question on an M3.
 6. **Benchmark hygiene:** GraphRAG-Bench Medical is saturated (closed-book 90 %); MuSiQue is the dataset that
    separates methods (closed-book 14 %).
 
@@ -51,16 +51,16 @@ missing one of 22 inserted documents (64 of 1,354 chunks) that LightRAG refused 
 
 | Method | MuSiQue | HotpotQA | 2Wiki | Medical | Novel | Multi-hop avg | All-5 avg |
 |---|---|---|---|---|---|---|---|
-| `closed_book` | 14.0 [9.5–19.0] | 48.5 [42.0–55.5] | 43.5 [37.0–50.5] | 90.0 [85.5–94.0] | 43.0 [36.0–50.0] | **35.3** | 47.8 |
-| `naive_rag` | 49.5 [42.0–56.5] | 86.5 [82.0–91.0] | 65.5 [59.0–72.0] | 88.5 [84.0–92.5] | 72.0 [65.5–78.0] | **67.2** | 72.4 |
-| `rerank_rag` | 58.0 [51.0–65.0] | 87.0 [82.5–91.5] | 68.5 [62.0–74.5] | 89.0 [84.5–93.0] | 78.5 [73.0–84.0] | **71.2** | 76.2 |
-| `metarag` | 54.5 [47.5–61.5] | 84.0 [78.5–89.0] | 79.0 [72.5–84.5] | 84.5 [79.5–89.5] | 68.0 [62.0–74.5] | **72.5** | 74.0 |
-| `agentic_rag` | 54.5 [47.5–61.5] | 85.5 [80.5–90.0] | 64.0 [57.5–70.5] | 92.0 [88.0–95.5] | 73.5 [67.0–79.5] | **68.0** | 73.9 |
-| `a_rag` | 51.5 [45.0–58.0] | 81.5 [76.0–86.5] | 71.5 [65.0–77.5] | 91.5 [87.5–95.0] | 74.0 [68.0–80.0] | **68.2** | 74.0 |
-| `search_r1` | 47.0 [37.0–57.0] | 84.0 [77.0–91.0] | 61.0 [52.0–71.0] | – | – | **64.0** | – |
-| `lightrag` | 57.5 [50.5–64.5] | 86.0 [81.5–90.5] | 70.5 [64.0–76.5] | 91.0 [87.0–94.5] | 76.0 [70.0–81.5] | **71.3** | 76.2 |
-| `graph_r1` | 26.0 [20.0–32.5] | 60.0 [53.0–67.0] | 42.0 [35.0–49.0] | 85.0 [80.0–90.0] | 48.5 [41.5–55.5] | **42.7** | 52.3 |
-| `graph_r1_fc` | 49.5 [42.5–56.5] | 73.5 [67.5–79.5] | 56.0 [49.0–63.0] | 88.0 [83.5–92.5] | 63.0 [56.5–69.5] | **59.7** | 66.0 |
+| `closed_book` | 14.0 [9.5-19.0] | 48.5 [42.0-55.5] | 43.5 [37.0-50.5] | 90.0 [85.5-94.0] | 43.0 [36.0-50.0] | **35.3** | 47.8 |
+| `naive_rag` | 49.5 [42.0-56.5] | 86.5 [82.0-91.0] | 65.5 [59.0-72.0] | 88.5 [84.0-92.5] | 72.0 [65.5-78.0] | **67.2** | 72.4 |
+| `rerank_rag` | 58.0 [51.0-65.0] | 87.0 [82.5-91.5] | 68.5 [62.0-74.5] | 89.0 [84.5-93.0] | 78.5 [73.0-84.0] | **71.2** | 76.2 |
+| `metarag` | 54.5 [47.5-61.5] | 84.0 [78.5-89.0] | 79.0 [72.5-84.5] | 84.5 [79.5-89.5] | 68.0 [62.0-74.5] | **72.5** | 74.0 |
+| `agentic_rag` | 54.5 [47.5-61.5] | 85.5 [80.5-90.0] | 64.0 [57.5-70.5] | 92.0 [88.0-95.5] | 73.5 [67.0-79.5] | **68.0** | 73.9 |
+| `a_rag` | 51.5 [45.0-58.0] | 81.5 [76.0-86.5] | 71.5 [65.0-77.5] | 91.5 [87.5-95.0] | 74.0 [68.0-80.0] | **68.2** | 74.0 |
+| `search_r1` | 47.0 [37.0-57.0] | 84.0 [77.0-91.0] | 61.0 [52.0-71.0] | - | - | **64.0** | - |
+| `lightrag` | 57.5 [50.5-64.5] | 86.0 [81.5-90.5] | 70.5 [64.0-76.5] | 91.0 [87.0-94.5] | 76.0 [70.0-81.5] | **71.3** | 76.2 |
+| `graph_r1` | 26.0 [20.0-32.5] | 60.0 [53.0-67.0] | 42.0 [35.0-49.0] | 85.0 [80.0-90.0] | 48.5 [41.5-55.5] | **42.7** | 52.3 |
+| `graph_r1_fc` | 49.5 [42.5-56.5] | 73.5 [67.5-79.5] | 56.0 [49.0-63.0] | 88.0 [83.5-92.5] | 63.0 [56.5-69.5] | **59.7** | 66.0 |
 
 ### Short-answer metrics, averaged over MuSiQue / HotpotQA / 2Wiki (%)
 
@@ -135,7 +135,7 @@ missing one of 22 inserted documents (64 of 1,354 chunks) that LightRAG refused 
 | `rerank_rag` | baseline | hybrid top-30 → `bge-reranker-v2-m3` → top-8 → answer |
 | `metarag` | metacognitive | answer, *monitor* agreement with an independent expert, *evaluate* what is missing, *plan* a new query, repeat (WWW'24) |
 | `agentic_rag` | agentic | the LLM drives a single `search` tool in a loop |
-| `a_rag` | agentic | the LLM gets *hierarchical* tools — exact keyword search, sentence-level semantic search, full-chunk reading (arXiv 2602.03442, Feb 2026) |
+| `a_rag` | agentic | the LLM gets *hierarchical* tools - exact keyword search, sentence-level semantic search, full-chunk reading (arXiv 2602.03442, Feb 2026) |
 | `search_r1` | RL-trained | a 7B model trained with PPO to interleave `<think>`, `<search>` and `<answer>` (Search-R1), run locally |
 | `lightrag` | graph | entity/relation graph extracted by an LLM, queried with local + global keywords (LightRAG) |
 | `graph_r1` | graph + agentic | n-ary knowledge hypergraph + a think/query/retrieve/answer agent loop (Graph-R1, ICML'26) |
@@ -162,9 +162,9 @@ so numbers can be compared with those papers' tables. Each dataset has its own c
 
 | Dataset | Kind | Corpus chunks | Questions available | Sampled |
 |---|---|---|---|---|
-| MuSiQue | 2–4 hop Wikipedia QA | 1,354 | 1,000 | 200 |
+| MuSiQue | 2-4 hop Wikipedia QA | 1,354 | 1,000 | 200 |
 | HotpotQA | 2 hop Wikipedia QA | 1,311 | 1,000 | 200 |
-| 2WikiMultiHopQA | 2–4 hop Wikipedia QA | 658 | 1,000 | 200 |
+| 2WikiMultiHopQA | 2-4 hop Wikipedia QA | 658 | 1,000 | 200 |
 | Medical (GraphRAG-Bench) | domain QA, sentence answers | 225 | 2,062 | 200 (Fact Retrieval + Complex Reasoning) |
 | Novel (GraphRAG-Bench) | Project Gutenberg novels, sentence answers | 1,117 | 2,010 | 200 (Fact Retrieval + Complex Reasoning) |
 
@@ -173,12 +173,12 @@ whose answers can be judged correct/incorrect (summaries and creative writing ar
 
 ### Metrics
 
-* **LLM-Acc** – judge says the answer matches the gold answer (main metric; the only one for Medical/Novel)
-* **Contain** – normalized gold answer is a substring of the prediction (A-RAG's Cont-Acc)
-* **EM / F1** – SQuAD-normalized exact match and token F1
-* **Ctx-Recall** – the gold answer string appears in the corpus text the method showed the LLM (a retrieval proxy)
-* **Cost** – measured from API usage (cached-token discounts included), plus one-off graph-indexing cost
-* **Effort** – LLM calls, search calls, input/output tokens, latency per question
+* **LLM-Acc** - judge says the answer matches the gold answer (main metric; the only one for Medical/Novel)
+* **Contain** - normalized gold answer is a substring of the prediction (A-RAG's Cont-Acc)
+* **EM / F1** - SQuAD-normalized exact match and token F1
+* **Ctx-Recall** - the gold answer string appears in the corpus text the method showed the LLM (a retrieval proxy)
+* **Cost** - measured from API usage (cached-token discounts included), plus one-off graph-indexing cost
+* **Effort** - LLM calls, search calls, input/output tokens, latency per question
 * 95% bootstrap confidence intervals over questions
 
 ## Reproduce
